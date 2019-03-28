@@ -11,6 +11,9 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include <time.h>
+#include <sys/time.h>
+
 /* 内存管理函数重定义 */
 void *rt_malloc(rt_size_t nbytes)
 {
@@ -146,5 +149,48 @@ void rt_kprintf(char* format, ...)
 		}
 	}
 }
+
+
+void mssleep(int const time_in_ms)
+{
+    struct timespec time;
+    struct timespec time_buf;
+
+    int ret = -1;
+    time.tv_sec = (time_in_ms / 1000);
+    time.tv_nsec = (1000 * 1000 * (time_in_ms % 1000));
+
+    time_buf = time;
+    while(1 == 1) /* lint warning modified */
+    {
+        time = time_buf;
+        ret = nanosleep(&time, &time_buf);
+        if((ret < 0))
+		{
+			continue;
+			printf("??\n");
+		}
+        else
+            break;
+    }
+    return;
+}
+
+
+rt_err_t rt_thread_sleep(rt_tick_t tick)
+{
+	int time=1000/RT_TICK_PER_SECOND*tick;
+	mssleep(time);
+	return RT_EOK;
+}
+
+rt_err_t rt_thread_delay(rt_tick_t tick)
+{
+    return rt_thread_sleep(tick);
+}
+
+
+
+
 
 

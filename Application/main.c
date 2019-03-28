@@ -7,6 +7,8 @@
 
 #include "rtthread.h"
 #include "cJSON.h"
+#include "FIFO.h"
+#include "LIFO.h"
 
 void cJSON_Test(void)
 {
@@ -24,12 +26,49 @@ void cJSON_Test(void)
     rt_kprintf("%s\n", cJSON_PrintUnformatted(root));
 }
 
+void FIFO_Test(void)
+{
+	rt_uint8_t AAA;
+	FIFO_Queue fifo;
+	FIFO_Init(&fifo,10);
 
+	int i=0;
+	while(FIFO_PushElement(&fifo,i))
+	{
+		rt_thread_delay(10);
+		rt_kprintf("FIFO PushElement:%d\n",i);
+		i++;
+	}
+	while(FIFO_PopElement(&fifo,&AAA))
+	{
+		rt_kprintf("FIFO PopElement:%d\n",AAA);
+	}
+}
+
+void LIFO_Test(void)
+{
+	rt_uint8_t AAA;
+	LIFO_Stack Lifo;
+	LIFO_Init(&Lifo,10);
+	int i=0;
+	while(LIFO_PushElement(&Lifo,i))
+	{
+		rt_thread_delay(10);
+		rt_kprintf("LIFO PushElement:%d\n",i);
+		i++;
+	}
+	while(LIFO_PopElement(&Lifo,&AAA))
+	{
+		rt_kprintf("LIFO PopElement:%d\n",AAA);
+	}
+}
 
 
 int main(void)
 {
-	cJSON_Test();
+//	cJSON_Test();
+	FIFO_Test();
+	LIFO_Test();
 }
 
 

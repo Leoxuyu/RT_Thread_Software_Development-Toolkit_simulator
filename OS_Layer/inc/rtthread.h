@@ -31,5 +31,5 @@ rt_int32_t rt_memcmp(const void *cs, const void *ct, rt_ubase_t count);
 rt_uint32_t rt_strcasecmp(const char *a, const char *b);
 
 void rt_kprintf(char* format, ...);
-
+rt_err_t rt_thread_delay(rt_tick_t tick);
 #endif /* OS_LAYER_INC_RTTHREAD_H_ */
